@@ -1,0 +1,153 @@
+{
+   "AWSTemplateFormatVersion":"2010-09-09",
+   "Description":"AWS AUTO SCALING CloudFormation Template.",
+   "Parameters":{
+      "InstanceType":{
+         "Description":"WebServer EC2 instance type",
+         "Type":"String",
+         "Default":"t2.micro",
+         "ConstraintDescription":"must be a valid EC2 instance type."
+      },
+      "SSHLocation":{
+         "Description":"The IP address range that can be used to SSH to the EC2 instances",
+         "Type":"String",
+         "MinLength":"9",
+         "MaxLength":"18",
+         "Default":"0.0.0.0/0",
+         "AllowedPattern":"(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})",
+         "ConstraintDescription":"must be a valid IP CIDR range of the form x.x.x.x/x."
+      },
+      "CERTIFICATEARN":{
+         "Type":"String"
+      },
+      "hostedZone":{
+         "Type":"String"
+      },
+      "S3BucketName":{
+         "Type":"String"
+      },
+      
+      "REGION":{
+         "Type":"String"
+      },
+      "PWDRESETARN":{
+         "Type":"String"
+      },
+      "DOMAINNAME":{
+         "Type":"String"
+      }
+   },
+   "Resources":{
+     
+             "SecurityGroupforRDS":
+            {
+                  "Type": "AWS::EC2::SecurityGroup",
+                  
+                  "Properties": {
+                    "GroupDescription": "DB server firewall rules",
+                     "Tags":[
+               {
+                  "Key":"Name",
+                  "Value":"csye6225-RDS"
+               }
+            ],
+            "VpcId":{
+               "Fn::ImportValue":"vpcID"
+            },
+                    "SecurityGroupIngress": [
+                      {
+                        "IpProtocol": "tcp",
+                        "FromPort": "3306",
+                        "ToPort": "3306",
+                        "CidrIp": "0.0.0.0/0"
+                      }
+
+                    ]
+                  }
+                } ,
+
+      "RDSSecurityGroup":{
+         "Type":"AWS::RDS::DBSecurityGroup",
+         "Properties":{
+            "EC2VpcId":{
+               "Fn::ImportValue":"vpcID"
+            },
+            "GroupDescription":"RDS Security Group"
+         }
+      },
+      "DbInstance":{
+         "Type":"AWS::RDS::DBInstance",
+         "Properties":{
+            "Engine":"MySQL",
+            "AllocatedStorage":100,
+            "DBInstanceClass":"db.t2.medium",
+            "DBInstanceIdentifier":"csye6225-fall2018",
+            "MultiAZ":false,
+            "MasterUsername":"csye6225master",
+            "MasterUserPassword":"csye6225password",
+            "PubliclyAccessible":false,
+            "DBName":"csye6225",
+            "VPCSecurityGroups":[
+               {
+                  "Ref":"SecurityGroupforRDS"
+               }
+            ],
+            "DBSubnetGroupName":{
+               "Ref":"myDBSubnetGroup"
+            }
+         }
+      },
+      "myDBSubnetGroup":{
+         "Type":"AWS::RDS::DBSubnetGroup",
+         "Properties":{
+            "DBSubnetGroupDescription":"making a RDS subnet from my VPC",
+            "SubnetIds":[
+               {
+                  "Fn::ImportValue":"websubnet1"
+               },
+               {
+                  "Fn::ImportValue":"websubnet2"
+               },
+               {
+                  "Fn::ImportValue":"websubnet3"
+               }
+            ]
+         }
+      },
+      "myDynamoDBTable":{
+         "Type":"AWS::DynamoDB::Table",
+         "Properties":{
+            "AttributeDefinitions":[
+               {
+                  "AttributeName":"ID",
+                  "AttributeType":"S"
+               }
+            ],
+            "KeySchema":[
+               {
+                  "AttributeName":"ID",
+                  "KeyType":"HASH"
+               }
+            ],
+            "TableName":"csye6225",
+            "ProvisionedThroughput":{
+               "ReadCapacityUnits":5,
+               "WriteCapacityUnits":5
+            },
+            "TimeToLiveSpecification":{
+               "AttributeName":"ttl",
+               "Enabled":"TRUE"
+            }
+         }
+      },
+      
+      "S3Bucket":{
+         "Type":"AWS::S3::Bucket",
+         "Properties":{
+            "BucketName":{
+               "Ref":"S3BucketName"
+            }
+         }
+      }
+   }
+}
