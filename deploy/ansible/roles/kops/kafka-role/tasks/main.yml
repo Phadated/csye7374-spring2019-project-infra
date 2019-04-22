@@ -1,0 +1,4 @@
+---
+# tasks file for kafka-role
+
+- include_tasks: kafka.yml

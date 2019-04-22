@@ -1,0 +1,4 @@
+---
+# tasks file for cluster-teardown-role
+- include_tasks: teardown.yml
+

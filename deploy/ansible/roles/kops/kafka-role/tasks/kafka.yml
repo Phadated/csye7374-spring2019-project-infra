@@ -1,0 +1,5 @@
+---
+
+- name: Kafka
+  shell: helm install --name my-confluent cp-helm-charts
+  

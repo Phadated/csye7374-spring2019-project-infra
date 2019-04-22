@@ -1,0 +1,6 @@
+---
+
+- name: Fluentd cloud watch
+  shell: helm install --name fluentd -f values.yaml incubator/fluentd-cloudwatch
+  args:
+    chdir: ../k8s/app/fluentd

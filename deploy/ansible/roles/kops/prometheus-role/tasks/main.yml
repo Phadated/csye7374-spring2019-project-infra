@@ -1,0 +1,4 @@
+---
+# tasks file for prometheus-role
+
+- include_tasks: prometheus.yml

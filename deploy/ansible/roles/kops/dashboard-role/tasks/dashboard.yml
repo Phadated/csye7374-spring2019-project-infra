@@ -1,0 +1,35 @@
+---
+  
+
+- name: execute create service account 
+  command: kubectl apply -f create-service-account.yaml
+  args:
+    chdir: ../k8s/dashboard/
+  
+
+- name: execute cluster role binding
+  command: kubectl apply -f cluster-role-binding.yaml
+  args:
+    chdir: ../k8s/dashboard/
+  
+
+- name: deploy dashboard
+  command: kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v1.10.1/src/deploy/recommended/kubernetes-dashboard.yaml
+  args:
+    chdir: ../k8s/dashboard/
+  
+
+- name: Get dashboard token
+  shell: kubectl -n kube-system describe secret $(kubectl -n kube-system get secret | grep admin-user | awk '{print $1}') 
+  args:
+    chdir: ../k8s/dashboard/
+  register: token
+
+- debug:
+    msg: "Token generated is {{token.stdout}}"
+
+- name: Access Dashbaord
+  command: kubectl proxy
+  args:
+    chdir: ../k8s/dashboard/
+  

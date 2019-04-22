@@ -1,0 +1,7 @@
+---
+- name: teardowncluster
+  shell: kops delete cluster 
+         --name {{clustername.stdout[:-1]}}
+         --state=s3://{{clustername.stdout[:-1]}}
+         --yes
+  

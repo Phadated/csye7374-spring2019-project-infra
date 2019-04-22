@@ -1,0 +1,15 @@
+---
+# tasks file for prometheusport-role
+
+- name: Export pod
+  shell: kubectl get pods --namespace default -l "app=prometheus,component=server" -o jsonpath="{.items[0].metadata.name}"
+  register: podnameprometheus
+
+- debug:
+    msg: "Pod is {{podnameprometheus.stdout}}"  
+
+- pause:
+    minutes: 2
+
+- name: Port forward
+  shell: kubectl --namespace default port-forward {{podnameprometheus.stdout}} 9090

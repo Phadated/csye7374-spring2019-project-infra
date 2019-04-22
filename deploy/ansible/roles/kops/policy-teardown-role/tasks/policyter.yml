@@ -1,0 +1,40 @@
+---
+# tasks file for policy-teardown-role
+
+
+- name: Delete S3 policy from template
+  iam_policy:
+   iam_type: role
+   iam_name: masters.{{clustername.stdout[:-1]}}
+   policy_name: "s3_limited_access_test"
+   state: absent
+
+- name: Delete S3 policy from template 2
+  iam_policy:
+   iam_type: role
+   iam_name: nodes.{{clustername.stdout[:-1]}}
+   policy_name: "s3_limited_access_test_nodes"
+   state: absent
+
+- name: Delete CloudWatchFullAccess policy from template
+  iam_policy:
+   iam_type: role
+   iam_name: masters.{{clustername.stdout[:-1]}}
+   policy_name: "CloudWatchFullAccessMaster"
+   state: absent
+
+- name: Delete  policy from template
+  iam_policy:
+   iam_type: role
+   iam_name: masters.{{clustername.stdout[:-1]}}
+   policy_name: "aws-cluster-autoscaler"
+   state: absent
+   
+
+- name: Delete CloudWatchFullaccess policy from template 2
+  iam_policy:
+   iam_type: role
+   iam_name: nodes.{{clustername.stdout[:-1]}}
+   policy_name: "CloudWatchFullAccessNodes"
+   state: absent
+   

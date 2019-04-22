@@ -1,0 +1,5 @@
+---
+# tasks file for cluster-setup-role
+- include_tasks: create.yml
+  
+

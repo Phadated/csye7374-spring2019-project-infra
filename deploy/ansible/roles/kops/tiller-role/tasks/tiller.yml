@@ -1,0 +1,15 @@
+---
+
+- name: Initialize helm
+  shell: helm init
+
+- name: Tiller create service
+  shell: kubectl create serviceaccount --namespace kube-system tiller
+
+- name: Tiller create cluster role binding
+  shell: kubectl create clusterrolebinding tiller-cluster-rule --clusterrole=cluster-admin --serviceaccount=kube-system:tiller
+
+
+- name: deploy tiller service account
+  shell: kubectl patch deploy --namespace kube-system tiller-deploy -p '{"spec":{"template":{"spec":{"serviceAccount":"tiller"}}}}'
+

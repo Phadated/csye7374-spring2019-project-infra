@@ -1,0 +1,7 @@
+---
+# tasks file for dashboard-teardown-role
+
+- name: delete dashboard
+  command: kubectl delete -f https://raw.githubusercontent.com/kubernetes/dashboard/v1.10.1/src/deploy/recommended/kubernetes-dashboard.yaml
+  args:
+    chdir: ../k8s/dashboard/

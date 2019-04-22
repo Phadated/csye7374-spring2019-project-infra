@@ -1,0 +1,4 @@
+---
+# tasks file for policy-teardown-role
+
+- include_tasks: policyter.yml

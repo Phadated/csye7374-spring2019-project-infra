@@ -1,0 +1,4 @@
+---
+# tasks file for jenkens-role
+
+- include_tasks: installjenkens.yml

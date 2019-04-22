@@ -1,0 +1,10 @@
+---
+# vars file for cluster-setup-role
+# - shell: aws route53 list-hosted-zones | jq -r '.HostedzONES[1].Name'
+#   register: ifconfig_output
+
+# - name: List all hosted zones
+#   route53_facts:
+#     query: hosted_zone
+#   register: hosted_zones
+

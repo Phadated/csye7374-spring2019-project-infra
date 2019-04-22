@@ -1,0 +1,3 @@
+---
+# tasks file for as-role
+- include_tasks: autoscaler.yml

@@ -1,0 +1,15 @@
+---
+# tasks file for grafanaport-role
+
+- name: Export pod
+  shell: kubectl get pods --namespace default -l "app=grafana,release=grafana" -o jsonpath="{.items[0].metadata.name}"
+  register: podnamegrafana
+
+- debug:
+    msg: "Pod is {{podnamegrafana.stdout}}"  
+
+- pause:
+    minutes: 10
+
+- name: Port forward
+  shell: kubectl --namespace default port-forward {{podnamegrafana.stdout}} 3000

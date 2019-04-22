@@ -1,0 +1,4 @@
+---
+# tasks file for admin-password-role
+
+- include_tasks: admin-password.yml

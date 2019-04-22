@@ -1,0 +1,4 @@
+---
+# tasks file for metrics-server-role
+
+- include_tasks: metricsserver.yml

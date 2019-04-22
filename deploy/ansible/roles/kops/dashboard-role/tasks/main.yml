@@ -1,0 +1,3 @@
+---
+# tasks file for dashboard-role
+- include_tasks: dashboard.yml

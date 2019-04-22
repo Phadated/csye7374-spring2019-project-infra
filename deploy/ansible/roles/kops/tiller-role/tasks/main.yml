@@ -1,0 +1,4 @@
+---
+# tasks file for tiller-role
+
+- include_tasks: tiller.yml

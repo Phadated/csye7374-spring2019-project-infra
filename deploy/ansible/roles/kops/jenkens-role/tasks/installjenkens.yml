@@ -1,0 +1,8 @@
+---
+
+- name: Fluentd cloud watch
+  shell: helm install --name jenkens -f values.yaml stable/jenkins
+  args:
+    chdir: ../k8s/app/jenkens
+
+    

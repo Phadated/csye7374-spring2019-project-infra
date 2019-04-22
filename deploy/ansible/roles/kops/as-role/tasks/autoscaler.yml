@@ -1,0 +1,6 @@
+---
+
+- name: Create Autoscaler for nodes
+  shell: cluster-autoscaler.sh
+  args:
+    chdir: ../k8s/app/

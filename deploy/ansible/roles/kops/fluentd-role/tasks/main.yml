@@ -1,0 +1,4 @@
+---
+# tasks file for fluentd-role
+
+- include_tasks: fluentd-cloudwatch.yml

@@ -1,0 +1,72 @@
+---
+
+
+- name: setupcluster
+  vars:
+    nodecount: 3
+  shell: kops create cluster 
+         --node-size t2.large
+         --master-size t2.large 
+         --kubernetes-version=1.13.0 
+         --zones=us-east-1b,us-east-1c,us-east-1d
+         --master-zones=us-east-1b 
+         --node-count={{nodecount}} {{clustername.stdout[:-1]}}
+         --state=s3://{{clustername.stdout[:-1]}}
+         --network-cidr=10.1.0.0/16
+         --ssh-public-key=~/.ssh/id_rsa.pub 
+    
+- name: updatecluster
+  shell: kops update cluster {{clustername.stdout[:-1]}} 
+         --state=s3://{{clustername.stdout[:-1]}}
+         --ssh-public-key=~/.ssh/id_rsa.pub --yes
+
+- pause:
+    minutes: 1
+
+
+- name: validate cluster
+  shell: kops validate cluster --name {{clustername.stdout[:-1]}}
+        --state=s3://{{clustername.stdout[:-1]}}
+
+  delegate_to: localhost
+  register: result
+  until: result.stdout.find("is ready") !=-1
+  retries: 14
+  delay: 60
+
+
+- name: Create S3 policy from template
+  iam_policy:
+   iam_type: role
+   iam_name: masters.{{clustername.stdout[:-1]}}
+   policy_name: "s3_limited_access_test"
+   state: present
+   policy_json: " {{ lookup( 'template', '../k8s/s3-policy-test.json') }} "
+
+- name: Create S3 policy from template 2
+  iam_policy:
+   iam_type: role
+   iam_name: nodes.{{clustername.stdout[:-1]}}
+   policy_name: "s3_limited_access_test_nodes"
+   state: present
+   policy_json: " {{ lookup( 'template', '../k8s/s3-policy-test.json') }} "
+
+- name: Create CloudWatchFullAccess policy from template
+  iam_policy:
+   iam_type: role
+   iam_name: masters.{{clustername.stdout[:-1]}}
+   policy_name: "CloudWatchFullAccessMaster"
+   state: present
+   policy_json: " {{ lookup( 'template', '../k8s/Cloudwatchfullaccess.json') }} "
+
+- name: Create CloudWatchFullaccess policy from template 2
+  iam_policy:
+   iam_type: role
+   iam_name: nodes.{{clustername.stdout[:-1]}}
+   policy_name: "CloudWatchFullAccessNodes"
+   state: present
+   policy_json: " {{ lookup( 'template', '../k8s/Cloudwatchfullaccess.json') }} "
+
+  
+
+
