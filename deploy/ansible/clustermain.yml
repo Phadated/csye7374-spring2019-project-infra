@@ -1,0 +1,17 @@
+---
+# defaults file for cluster-setup-role
+- hosts: localhost
+  connection: local
+  tasks:
+
+  - import_role: 
+      name: kops/common-role
+
+  - import_role: 
+      name: kops/cluster-setup-role
+
+  
+  - import_role: 
+      name: kops/dashboard-role
+  
+   
