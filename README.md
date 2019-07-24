@@ -1,6 +1,6 @@
 Goal Of the Project
 =========================
-To run your application in a hybrid cloud environment.
+To run the Nodejs application in a hybrid cloud environment.
 
 ![](https://imagecsye6225.s3.amazonaws.com/Infra.png)
 
@@ -26,3 +26,46 @@ Tech Stack Components
 18.	Apache Kafka (& Apache Zookeeper)
 19.	CI/CD using Jenkins
 20.	GitHub Repositories
+
+Requirements
+============
+* kops Version 1.11.0
+* Ansible 2.8
+* Docker
+
+Installation
+============
+1. Install Docker
+2. Install kops
+3. Install kubectl
+4. AWS CLI
+
+Set up domain for the kubernestes cluster in Route53
+example: 
+
+## Create ECR Repository Using AWS CLI
+aws ecr create-repository --repository-name csye7374
+
+## Deploying App to Kubernetes Cluster
+•	A Node.js application is located in csye7374-spring2019-project-webapp/deploy/webapp/ directory.
+•	A Docker file to build the image is in csye7374-spring2019-project-webapp/deploy/webapp/ directory.
+
+## Build & Push Docker Container Image to Amazon ECR
+### Retrieve the login command to use to authenticate your Docker client to your registry
+```	aws ecr get-login --no-include-email --region us-east-1 ```
+
+## Build Docker Image
+``` docker build -t csye7374 . ```
+
+## Tag Docker Image
+``` docker tag csye7374:latest <AWS_ACCOUNT_ID>.dkr.ecr.us-east-1.amazonaws.com/csye7374:latest ```
+
+## Push Docker Image
+``` docker push <AWS_ACCOUNT_ID>.dkr.ecr.us-east-1.amazonaws.com/csye7374:latest ```
+
+## Ansible Roles
+
+``` clustermain.yml ``` - Creates the kubernestes cluster using kops and set up the kubernestes dashboard 
+
+Dashboard can now be accessed locally via kubectl proxy at 
+``` http://localhost:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/.```
