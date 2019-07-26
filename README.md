@@ -74,7 +74,7 @@ A separate AWS ECR docker registry must be created for each application and init
 ## Push Docker Image
 ``` docker push <AWS_ACCOUNT_ID>.dkr.ecr.us-east-1.amazonaws.com/csye7374:latest ```
 
-## CI/CD Pipeline¶
+## CI/CD Pipeline
 CI/CD pipeline for all web applications using Jenkins.
 
 ## Ansible Roles and Playbooks (Infrastructure as code and Configuration Management)
@@ -110,7 +110,7 @@ Dashboard can now be accessed locally via kubectl proxy at
 
 ``` portgrafana.yml ``` - Port forwarding to grafana server 
 
-### Setup AWS Organization
+## Setup AWS Organization
 Enable organizations in your AWS account. Create a new account once organization has been setup. This new account will be where all resources that are not running on your Kubernetes cluster. 
 Kubernetes cluster continue to run in the master account. Setup AWS VPCs in different account. Once both VPCs are setup, you will manually configure VPC peering for them.
 
