@@ -2,7 +2,9 @@ Goal Of the Project
 =========================
 To run the Nodejs application in a hybrid cloud environment.
 
-![](https://imagecsye6225.s3.amazonaws.com/Infra.png)
+![Infrasturctureimage1](https://imagecsye6225.s3.amazonaws.com/Infra.png)
+
+![Infrasturctureimage2](https://imagecsye6225.s3.amazonaws.com/infra2.JPG)
 
 Tech Stack Components
 =========================
@@ -77,9 +79,12 @@ A separate AWS ECR docker registry must be created for each application and init
 ## CI/CD Pipeline
 CI/CD pipeline for all web applications using Jenkins.
 
+## Service discovery
+Both web applications will “discover” Kafka & Zookeeper endpoints using service discovery FQDN. 
+
 ## Ansible Roles and Playbooks (Infrastructure as code and Configuration Management)
 
-``` clustermain.yml ``` - Creates the kubernestes cluster using kops 
+``` clustermain.yml ``` - Creates the kubernestes cluster using kops in HA mode with 3 master nodes with each node in a separate availability zone. And will run minimum of 3 worker nodes in the cluster
 
 ``` autoscaler-playbook.yml ``` - Set autoscaling for the cluster (Auto scaling policy, Instance group, Configure Min, Max node count and cluster , Cluster autoscaler will run on master).
 
